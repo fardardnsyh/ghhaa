@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+  <title>My Chatbots</title>
+  <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='bots.css') }}"
+    />
+    <script>
+        function copyToClipboard(element) {
+            const url = element.getAttribute('data-link');
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Link copied to clipboard!');
+            }).catch(err => {
+                console.error('Error in copying text: ', err);
+            });
+        }
+      </script>
+</head>
+<body>
+{% block content %}
+{% include 'header.html' %}
+<div class="container">
+    <table class="bot-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bot in chatbots %}
+            <tr>
+                <td>{{ bot.id }}</td>
+                <td>{{ bot.chatbotName }}</td>
+                <td>
+                    <a href="{{ url_for('chat_with_bot', bot_id=bot.id) }}" class="btn button-3">Test Chat</a>
+                    <button class="btn button-3" onclick="copyToClipboard(this)" data-link="{{ url_for('public_chat', bot_id=bot.id, _external=True) }}">Copy Public Link</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="button-and-image">
+<a href=/create-new-bot><button class="button-29" role="button">Create a new bot!</button></a>
+</div>
+</body>
+{% endblock %}
